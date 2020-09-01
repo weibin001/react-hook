@@ -1,8 +1,16 @@
-// import React from 'react'
-import { renderRoutes } from './utils/renderRoutes'
+import React from 'react'
+import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import store from './store'
+import renderRoutes from './utils/renderRoutes'
 import { constantRoutes } from './router'
-import './App.css'
 
-export default function App() {
-  return renderRoutes(constantRoutes)
+function App() {
+  return (
+    <Provider store={store}>
+      <BrowserRouter>{renderRoutes({ routes: constantRoutes })}</BrowserRouter>
+    </Provider>
+  )
 }
+
+export default App

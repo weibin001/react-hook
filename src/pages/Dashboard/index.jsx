@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 
-const Dashboard = React.memo((props) => {
+const Dashboard = () => {
   useEffect(() => {
-    console.log(props)
-  }, [props])
+    console.log('sss')
+  }, [])
   return <div>Dashboard</div>
-})
+}
 
 export default Dashboard

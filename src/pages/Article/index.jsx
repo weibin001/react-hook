@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-const Article = () => {
-  return <div>Article</div>
+export class Article extends Component {
+  render() {
+    return <div>Article</div>
+  }
 }
 
 export default Article

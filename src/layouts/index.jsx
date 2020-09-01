@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Layout, Menu } from 'antd'
-// import { bindActionCreators } from 'redux'
 import { useSelector, shallowEqual, useDispatch } from 'react-redux'
-// import { toggleSidebar, closeSidebar } from '../store/actions/modules/app'
+
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -12,28 +11,22 @@ import {
   FileOutlined,
 } from '@ant-design/icons'
 import { throttle } from '@/utils/utils'
-import { renderRoutes } from '@/utils/renderRoutes'
-import style from './index.less'
+
+import './index.less'
 
 const { Header, Content, Sider } = Layout
 
 const { SubMenu } = Menu
 
-// const mapStateToProps = (state) => ({ sidebar: state.app.sidebar })
-// const mapDispatchToProps = (dispatch) => ({
-//   toggleSidebar: bindActionCreators(toggleSidebar, dispatch),
-//   closeSidebar: bindActionCreators(closeSidebar, dispatch),
-// })
-
-const AppHeader = React.memo(() => {
+const AppHeader = (props) => {
   const sidebar = useSelector((state) => state.app.sidebar, shallowEqual)
   const dispatch = useDispatch()
   const toggleSidebar = useCallback(() => dispatch({ type: 'TOGGLE_SIDEBAR' }), [dispatch])
   const TagTrigger = useMemo(() => (sidebar ? MenuUnfoldOutlined : MenuFoldOutlined), [sidebar])
   return (
-    <Header style={{ backgroundColor: '#fff', padding: '0 20px' }}>
+    <Header className={[props.className]} style={{ ...props.style }}>
       <TagTrigger
-        className={style.trigger}
+        className="app-header__trigger"
         onClick={(e) => {
           e.stopPropagation()
           toggleSidebar()
@@ -41,16 +34,17 @@ const AppHeader = React.memo(() => {
       />
     </Header>
   )
-})
+}
 
 const BasicLayout = (props) => {
-  const { routes } = props
-
   const history = useHistory()
   const sidebar = useSelector((state) => state.app.sidebar, shallowEqual)
   const dispatch = useDispatch()
-
   const closeSidebar = useCallback(() => dispatch({ type: 'CLOSE_SIDEBAR' }), [dispatch])
+
+  useEffect(() => {
+    console.log(1)
+  }, [])
 
   useEffect(() => {
     const onResizeWindow = (e) => {
@@ -63,9 +57,9 @@ const BasicLayout = (props) => {
   }, [closeSidebar])
 
   return (
-    <Layout className={style['app-layout']} style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: '100vh' }}>
       <Sider
-        className={[style['app-layout-sider']]}
+        className="app-sider"
         width={240}
         collapsed={sidebar}
         collapsedWidth={64}
@@ -77,7 +71,7 @@ const BasicLayout = (props) => {
           position: 'fixed',
           left: 0,
         }}>
-        <div className={[style.logo]} />
+        <div className="logo" />
         <Menu theme="dark" mode="inline" style={{ width: '100%' }}>
           <SubMenu key="sub1" icon={<DesktopOutlined />} title="Navigation One">
             <Menu.Item key="1" onClick={() => history.push({ pathname: '/article/list' })}>
@@ -108,20 +102,12 @@ const BasicLayout = (props) => {
         </Menu>
       </Sider>
       <Layout className="app-container" style={{ marginLeft: sidebar ? 64 : 240 }}>
-        <AppHeader />
-        {/* <Header style={{ backgroundColor: '#fff', padding: '0 20px' }}>
-          <TagTrigger
-            className={style.trigger}
-            onClick={(e) => {
-              e.stopPropagation()
-              setCollapse(!collapse)
-            }}
-          />
-        </Header> */}
-        <Content>{renderRoutes(routes)}</Content>
+        <AppHeader className="app-header" style={{ backgroundColor: '#fff' }} />
+        <Content>{props.children}</Content>
       </Layout>
     </Layout>
   )
 }
+
 
 export default BasicLayout

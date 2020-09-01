@@ -23,4 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 #format
-/.prettierrc
+/.prettierrc*
+
+# editor
+/.vscode
