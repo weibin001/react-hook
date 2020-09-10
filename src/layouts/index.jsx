@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { Layout, Menu } from 'antd'
 import { useSelector, shallowEqual, useDispatch } from 'react-redux'
 
@@ -38,13 +38,15 @@ const AppHeader = (props) => {
 
 const BasicLayout = (props) => {
   const history = useHistory()
+  const location = useLocation()
+  const pathname = useMemo(() => location.pathname, [location])
   const sidebar = useSelector((state) => state.app.sidebar, shallowEqual)
   const dispatch = useDispatch()
   const closeSidebar = useCallback(() => dispatch({ type: 'CLOSE_SIDEBAR' }), [dispatch])
 
-  useEffect(() => {
-    console.log(1)
-  }, [])
+  const handleMenuClick = ({ key }) => {
+    history.push(key)
+  }
 
   useEffect(() => {
     const onResizeWindow = (e) => {
@@ -72,17 +74,16 @@ const BasicLayout = (props) => {
           left: 0,
         }}>
         <div className="logo" />
-        <Menu theme="dark" mode="inline" style={{ width: '100%' }}>
+        <Menu
+          theme="dark"
+          mode="inline"
+          style={{ width: '100%' }}
+          defaultSelectedKeys={[pathname]}
+          onClick={handleMenuClick}>
           <SubMenu key="sub1" icon={<DesktopOutlined />} title="Navigation One">
-            <Menu.Item key="1" onClick={() => history.push({ pathname: '/article/list' })}>
-              Option 1
-            </Menu.Item>
-            <Menu.Item key="2" onClick={() => history.push({ pathname: '/article/1' })}>
-              Option 2
-            </Menu.Item>
-            <Menu.Item key="3" onClick={() => history.push({ pathname: '/' })}>
-              Option 3
-            </Menu.Item>
+            <Menu.Item key="/article/list">Option 1</Menu.Item>
+            <Menu.Item key="/article/1">Option 2</Menu.Item>
+            <Menu.Item key="/dashboard">Option 3</Menu.Item>
             <Menu.Item key="4">Option 4</Menu.Item>
           </SubMenu>
           <SubMenu key="sub2" icon={<PieChartOutlined />} title="Navigation Two">
@@ -108,6 +109,5 @@ const BasicLayout = (props) => {
     </Layout>
   )
 }
-
 
 export default BasicLayout

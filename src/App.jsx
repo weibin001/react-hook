@@ -5,12 +5,14 @@ import store from './store'
 import renderRoutes from './utils/renderRoutes'
 import { constantRoutes } from './router'
 
-function App() {
-  return (
-    <Provider store={store}>
-      <BrowserRouter>{renderRoutes({ routes: constantRoutes })}</BrowserRouter>
-    </Provider>
-  )
+class App extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <BrowserRouter>{renderRoutes({ routes: constantRoutes })}</BrowserRouter>
+      </Provider>
+    )
+  }
 }
 
 export default App

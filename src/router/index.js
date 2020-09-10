@@ -11,6 +11,7 @@ export const constantRoutes = [
   {
     path: '/',
     component: BasicLayout,
+    wrappers: ['Login'],
     routes: [
       {
         path: '/',
@@ -81,7 +82,7 @@ export const constantRoutes = [
     ],
   },
   {
-    path: '/*',
+    path: '*',
     name: 'notFound',
     component: NotFound,
   },

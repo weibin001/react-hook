@@ -1,6 +1,7 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import Loadable from 'react-loadable'
+import { default as wrapperMap } from '@/wrappers'
 
 function render({ route, opts, props }) {
   const routes = renderRoutes({
@@ -30,10 +31,12 @@ function render({ route, opts, props }) {
       routes: opts.rootRoutes,
     }
     let ret = <Component {...newProps}>{routes}</Component>
+    // console.log(wrapperMap)
     if (wrappers) {
       let len = wrappers.length - 1
       while (len >= 0) {
-        ret = React.createElement(wrappers[len], newProps, ret)
+        const wrapperCom = wrapperMap[wrappers[len] + 'Wrapper']
+        wrapperCom && (ret = React.createElement(wrapperCom, newProps, ret))
         len--
       }
     }
