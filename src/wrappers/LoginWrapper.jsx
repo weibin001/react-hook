@@ -14,21 +14,22 @@ function LoginWrapper(props) {
   const dispatch = useDispatch()
   const authLogin = useCallback(() => dispatch({ type: 'GET_USER_UPDATE' }), [dispatch])
 
-  if (userInfo) {
-    return props.children
-  } else if (token && !userInfo) {
-    authLogin()
-    return <h2 style={{ textAlign: 'center' }}>Login</h2>
-  } else {
-    return (
-      <Redirect
-        to={{
-          pathname: '/login',
-          search: query,
-        }}
-      />
-    )
-  }
+  return props.children
+  // if (userInfo) {
+  //   return props.children
+  // } else if (token && !userInfo) {
+  //   authLogin()
+  //   return <h2 style={{ textAlign: 'center' }}>Login</h2>
+  // } else {
+  //   return (
+  //     <Redirect
+  //       to={{
+  //         pathname: '/login',
+  //         search: query,
+  //       }}
+  //     />
+  //   )
+  // }
 }
 
 export default withRouter(LoginWrapper)

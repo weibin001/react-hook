@@ -1,4 +1,6 @@
 import { call, put, takeLatest, fork, select, take, cancel } from 'redux-saga/effects'
+import { login } from '@/api/user'
+
 const mockUserInfo = {
   name: 'admin',
 }
@@ -14,7 +16,7 @@ export const type = {
 
 const initState = {
   userInfo: null,
-  accessToken: Date.now(),
+  accessToken: '',
   refreshToken: '',
 }
 
@@ -55,7 +57,7 @@ function delay(time, result) {
 
 function* authrize(form) {
   try {
-    const data = yield call(delay, 1000, { accessToken: Date.now(), refreshToken: 'token' })
+    const data = yield call(login, form)
     yield put({ type: 'SET_TOKEN', data })
     return data
   } catch (e) {

@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { message as Message, Modal } from 'antd'
+
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -9,8 +11,8 @@ const service = axios.create({
 service.interceptors.request.use(
   (config) => {
     // Add X-Access-Token header to every request, you can add other custom headers here
-    // if (UserModule.accessToken) {
-    //   config.headers['X-Access-Token'] = UserModule.accessToken || ''
+    // if (accessToken) {
+    //   config.headers['X-Access-Token'] = accessToken || ''
     // }
     return config
   },
@@ -34,6 +36,11 @@ service.interceptors.response.use(
         //     location.reload() // To prevent bugs from vue-router
         //   })
       } else if (code === 50002) {
+        return Modal.warning({
+          title: '警告',
+          content: '你已被登出，请重新登录',
+          onOk: () => {},
+        })
         // return MessageBox.confirm('你已被登出，请重新登录', '警告', {
         //   confirmButtonText: '确定',
         //   showCancelButton: false,
@@ -42,22 +49,13 @@ service.interceptors.response.use(
         //   UserModule.LogOut()
         // })
       }
-      // message &&
-      //   Message({
-      //     message: message,
-      //     type: 'error',
-      //     duration: 5 * 1000,
-      //   })
+      message && Message.error(message)
       return Promise.reject(new Error(message || 'Error'))
     }
     return response.data
   },
   ({ message, response }) => {
-    // Message({
-    //   message: response?.data?.message || message,
-    //   type: 'error',
-    //   duration: 5 * 1000,
-    // })
+    Message.error(message)
     return Promise.reject({ message: message || response?.data?.message })
   }
 )

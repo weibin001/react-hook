@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Form, Input, Button, Checkbox, DatePicker, message } from 'antd'
+import { Form, Input, Button, Checkbox, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import { actions } from '@/store/user'
@@ -19,7 +19,6 @@ const Login = ({ onSubmitForm }) => {
     password: '',
     remember: true,
   }
-  const [expiredTime, setExpried] = useState(loginForm.remember)
 
   const redirect = useMemo(() => {
     let ans = '/admin'
@@ -35,7 +34,7 @@ const Login = ({ onSubmitForm }) => {
     return ans
   }, [search])
 
-  const handleSubmitForm = (form) => {
+  const handleSubmitForm = async (form) => {
     return new Promise((resolve, reject) => {
       setLogining(true)
       message.loading({ content: 'Login...', key, duration: 0 })
@@ -81,16 +80,9 @@ const Login = ({ onSubmitForm }) => {
             <Form.Item name="password" rules={[{ required: true, message: 'Please input your Password!' }]}>
               <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password" />
             </Form.Item>
-            {expiredTime ? (
-              <Form.Item name="expiredTime" rules={[{ required: true, message: 'Please choose your expired!' }]}>
-                <DatePicker style={{ width: '100%' }} showTime format={'YYYY-MM-DD'} />
-              </Form.Item>
-            ) : (
-              ''
-            )}
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox onChange={(e) => setExpried(e.target.checked)}>Remember me</Checkbox>
+                <Checkbox>Remember me</Checkbox>
               </Form.Item>
             </Form.Item>
 
